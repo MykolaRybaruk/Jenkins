@@ -1,22 +1,30 @@
 pipeline {
-    agent: any
+    agent any
 
     stages {
-        stage('Updating Index') {
-            sudo apt update
+        stage('Updating index') {
+            steps {
+                sh 'sudo apt update'
+            }
         }
 
-        stage('Installink Apache2') {
-            sudo apt install apache2 -y
+        stage('Installing Apache2') {
+            steps {
+                sh 'sudo apt install apache2 -y'
+            }
         }
 
-        stage('Launching Jenkins and adding to AutoStart') {
-            sudo systemctl start apache2
-            sudo systemctl enable apache2
+        stage ('Launching Apache2 and adding to autostart') {
+            steps {
+                sh 'sudo systemctl start apache2'
+                sh 'sudo systemctl enable apache2'
+            }
         }
 
-        stage('Searching for 4xx and 5xx errors') {
-            sudo grep -E  (4|5)[0-9]{2}  /var/log/apache2/access.log
+        stage ('Searching 4xx and 5xx errors') {
+            steps {
+                sudo grep -E (4|5)[0-9]{2} /var/log/apache2/access.log
+            }
         }
     }
 }
